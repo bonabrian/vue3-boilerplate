@@ -1,25 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
+import routes from './routes';
 
-const routes = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home,
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
-  },
-];
+const scrollBehavior = (to) => {
+  const position = {};
+  if (to.hash) {
+    position.selector = to.hash;
+  }
+  if (to.matched.some((m) => m.meta.scrollTop)) {
+    position.x = 0;
+    position.y = 0;
+  }
+
+  return position;
+};
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes,
+  scrollBehavior,
+  routes
 });
+
+// add your middleware here
+// router.beforeEach(yourMiddleware);
 
 export default router;
